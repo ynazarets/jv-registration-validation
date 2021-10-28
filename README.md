@@ -15,3 +15,5 @@ In case of invalid data you should throw RuntimeException.
 - `User get (String login)` - which gets the user from the storage by login or returns null if there is no such user.
 
 Your task is to write as many tests as possible to cover all possible options.
+
+#### [Try to avoid these common mistakes, while solving task](https://mate-academy.github.io/jv-program-common-mistakes/java-core/junit/registration-validation)
