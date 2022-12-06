@@ -8,6 +8,7 @@ This method should register a user (by adding it to Storage) only if the user me
 - the user is at least 18 years old
 - user password is at least 6 characters
 
+
 You should create your custom RuntimeException and throw it in case of invalid data.
 
 `Storage` and class `StorageDaoImpl` for working with the Storage has already been implemented. It has two methods:
