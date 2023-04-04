@@ -5,8 +5,9 @@ Your task is to implement a registration service and write unit tests for it.
 Registration service has one method `register(User user)`, that accepts some user (the User.class has already been given to you).
 This method should register a user (by adding it to Storage) only if the user meets the following criteria:
 - there is no user with such login in the Storage yet
-- the user is at least 18 years old
-- user password is at least 6 characters
+- user's login is at least 6 characters
+- user's password is at least 6 characters
+- user's age is at least 18 years old
 
 
 You should create your custom unchecked exception and throw it in case of invalid data.
