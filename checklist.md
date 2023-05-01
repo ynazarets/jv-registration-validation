@@ -13,35 +13,33 @@ Testing only 'abc' (3-length - not-ok) and 'abcdefgh' (8-length - ok) is not eno
 * Use low-level methods like `Storage.people.add()` directly instead of `RegistrationService.register()` method to add users for testing. Because we can not use the same method which is under a test to insert some mock test data into our storage since we can not guarantee its correctness yet.
 * Don't create one big if with all conditions. Better to split one big if into several small ones.
 
-```java 
-Bad example:
+  - Bad example:
+  ```java
+    public User register(User user) {
+     if (user.getLogin() == null 
+       || user.getPassword() == null
+       || user.getAge() < MIN_AGE) {
+       throw new RegistrationException("Invalid data");
+     }
+     return storageDao.add(user);
+    }
+  ```
 
-public User register(User user) {
- if (user.getLogin() == null 
-   || user.getPassword() == null
-   || user.getAge() < MIN_AGE) {
-   throw new RegistrationException("Invalid data");
- }
- return storageDao.add(user);
-}
-```
-
-```java 
-Good example:
-
-public User register(User user) {
- if (user.getLogin() == null) {
-   throw new RegistrationException("Login can't be null");
- }
- if (user.getPassword() == null) {
-   throw new RegistrationException("Password can't be null");
- }
- if (user.getAge() < MIN_AGE) {
-   throw new RegistrationException("Not valid age: " + user.getAge() + ". Min allowed age is " + MIN_AGE);
- }
- return storageDao.add(user);
-}
-```
+  - Good example:
+  ```java
+    public User register(User user) {
+     if (user.getLogin() == null) {
+       throw new RegistrationException("Login can't be null");
+     }
+     if (user.getPassword() == null) {
+       throw new RegistrationException("Password can't be null");
+     }
+     if (user.getAge() < MIN_AGE) {
+       throw new RegistrationException("Not valid age: " + user.getAge() + ". Min allowed age is " + MIN_AGE);
+     }
+     return storageDao.add(user);
+    }
+  ```
 * Exception messages should be informative (see code example above).
 * You don't need main method to see how your solution works, you have tests for this purpose.
 * If you are expecting exception to be thrown in the test, you can do it this way:
