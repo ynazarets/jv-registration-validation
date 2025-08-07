@@ -25,11 +25,11 @@ class RegistrationServiceImplTest {
 
     @BeforeEach
     void tearDown() {
-        Storage.people.clear();
+        Storage.getPeople().clear();
     }
 
     @Test
-    void ageLessThanEighteen_notOk() {
+    void register_ageLessThanEighteen_notOk() {
         userForTest = new User();
         userForTest.setPassword("ValidPassword");
         userForTest.setLogin("ValidLogin");
@@ -38,7 +38,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void loginShortenThanSixSymbols_notOk() {
+    void register_loginShortenThanSixSymbols_notOk() {
         userForTest = new User();
         userForTest.setAge(20);
         userForTest.setPassword("ValidPassword");
@@ -47,7 +47,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void passwordShortenThanSixSymbols_NotOk() {
+    void register_passwordShortenThanSixSymbols_NotOk() {
         userForTest = new User();
         userForTest.setAge(20);
         userForTest.setLogin("validLogin");
@@ -61,7 +61,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void duplicateUserForRegister_NotOk() throws NotValidData {
+    void register_duplicateUserForRegister_NotOk() {
         User userWillFirstRegister = new User("ValidLogin", "ValidPassword", 20);
         userForTest = new User("ValidLogin", "ValidPassword", 20);
         storageDao.add(userWillFirstRegister);
@@ -69,7 +69,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void register_Ok() throws NotValidData {
+    void register_Valid_Ok() {
         userForTest = new User("ValidLogin", "ValidPassword", 20);
         User registeredUser = registrationService.register(userForTest);
         assertNotNull(registeredUser);
@@ -78,31 +78,31 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void registerAgeNull_notOk() {
+    void register_registerAgeNull_notOk() {
         userForTest = new User("ValidLogin", "ValidPassword", null);
         assertThrows(NotValidData.class, () -> registrationService.register(userForTest));
     }
 
     @Test
-    void registerLoginNull_notOk() {
+    void register_registerLoginNull_notOk() {
         userForTest = new User(null, "ValidPassword", 20);
         assertThrows(NotValidData.class, () -> registrationService.register(userForTest));
     }
 
     @Test
-    void spaceInsteadOfSymbols_NotOk() {
+    void register_spaceInsteadOfSymbols_NotOk() {
         userForTest = new User("       ", "       ", 20);
         assertThrows(NotValidData.class, () -> registrationService.register(userForTest));
     }
 
     @Test
-    void registerPasswordNull_notOk() {
+    void register_registerPasswordNull_notOk() {
         userForTest = new User("ValidLogin", null, 20);
         assertThrows(NotValidData.class, () -> registrationService.register(userForTest));
     }
 
     @Test
-    void passwordLengthItsSix_Ok() {
+    void register_passwordLengthItsSix_Ok() {
         userForTest = new User("ValidLogin", "itssix", 20);
         User registeredUser = registrationService.register(userForTest);
         assertNotNull(registeredUser);
@@ -110,7 +110,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void loginLengthItsSix_Ok() {
+    void register_loginLengthItsSix_Ok() {
         userForTest = new User("itsSix", "ValidPassword", 20);
         User registeredUser = registrationService.register(userForTest);
         assertNotNull(registeredUser);
@@ -118,7 +118,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void ageItsEighteen_Ok() {
+    void register_ageItsEighteen_Ok() {
         userForTest = new User("ValidLogin", "itsSix", 18);
         User registeredUser = registrationService.register(userForTest);
         assertNotNull(registeredUser);
@@ -126,7 +126,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void badPasswordExperience_NotOk() {
+    void register_badPasswordExperience_NotOk() {
         userForTest = new User("ValidLogin", "123456789", 20);
         assertThrows(NotValidData.class, () -> registrationService.register(userForTest));
     }
