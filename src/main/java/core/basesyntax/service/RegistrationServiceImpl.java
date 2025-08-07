@@ -15,10 +15,14 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (user == null) {
             throw new NotValidData("user can`t be null. Create another User.");
         }
-        if (user.getPassword() == null
-                || user.getPassword().length() < MIN_LENGTH_PASSWORD_AND_LOGIN
-                || user.getPassword().trim().isEmpty()) {
+        if (user.getPassword() == null) {
             throw new NotValidData("Can`t created new profile. Your password is too short.");
+        }
+        if (user.getPassword().length() < MIN_LENGTH_PASSWORD_AND_LOGIN) {
+            throw new NotValidData("Can`t created new profile. Your password is empty.");
+        }
+        if (user.getPassword().trim().isEmpty()) {
+            throw new NotValidData("Can`t created new profile. Your password don`t have symbols.");
         }
         for (String currentPassword : popularPasswords) {
             if (currentPassword.equals(user.getPassword())) {
@@ -26,15 +30,23 @@ public class RegistrationServiceImpl implements RegistrationService {
                         + " you must creating something new.");
             }
         }
-        if (user.getAge() == null || user.getAge() < MIN_AGE) {
+        if (user.getAge() == null) {
+            throw new NotValidData("Your age is null.");
+        }
+
+        if (user.getAge() < MIN_AGE) {
             throw new NotValidData("Your age must be more than " + MIN_AGE + " years old.");
         }
-        if (user.getLogin() == null || user.getLogin().length() < MIN_LENGTH_PASSWORD_AND_LOGIN
-                || user.getLogin().trim().isEmpty()) {
+        if (user.getLogin() == null) {
+            throw new NotValidData("Can`t created new profile. Your login is null.");
+        }
+        if (user.getLogin().length() < MIN_LENGTH_PASSWORD_AND_LOGIN) {
             throw new NotValidData("Can`t created new profile. Your login is too short.");
         }
-        User userWasExist = storageDao.get(user.getLogin());
-        if (userWasExist != null) {
+        if (user.getLogin().trim().isEmpty()) {
+            throw new NotValidData("Can`t created new profile. Your login don`t have symbols.");
+        }
+        if (storageDao.get(user.getLogin()) != null) {
             throw new NotValidData("Profile with this login already exists.");
         }
         storageDao.add(user);

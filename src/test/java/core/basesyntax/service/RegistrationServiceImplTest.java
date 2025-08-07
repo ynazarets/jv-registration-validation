@@ -1,8 +1,11 @@
 package core.basesyntax.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import core.basesyntax.dao.StorageDao;
+import core.basesyntax.dao.StorageDaoImpl;
 import core.basesyntax.db.Storage;
 import core.basesyntax.model.User;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,10 +14,12 @@ import org.junit.jupiter.api.Test;
 
 class RegistrationServiceImplTest {
     private static RegistrationServiceImpl registrationService;
+    private static StorageDao storageDao;
     private User userForTest;
 
     @BeforeAll
     static void setUp() {
+        storageDao = new StorageDaoImpl();
         registrationService = new RegistrationServiceImpl();
     }
 
@@ -59,7 +64,7 @@ class RegistrationServiceImplTest {
     void duplicateUserForRegister_NotOk() throws NotValidData {
         User userWillFirstRegister = new User("ValidLogin", "ValidPassword", 20);
         userForTest = new User("ValidLogin", "ValidPassword", 20);
-        registrationService.register(userWillFirstRegister);
+        storageDao.add(userWillFirstRegister);
         assertThrows(NotValidData.class, () -> registrationService.register(userForTest));
     }
 
@@ -68,6 +73,8 @@ class RegistrationServiceImplTest {
         userForTest = new User("ValidLogin", "ValidPassword", 20);
         User registeredUser = registrationService.register(userForTest);
         assertNotNull(registeredUser);
+        assertEquals(userForTest, storageDao.get(userForTest.getLogin()));
+
     }
 
     @Test
@@ -99,20 +106,23 @@ class RegistrationServiceImplTest {
         userForTest = new User("ValidLogin", "itssix", 20);
         User registeredUser = registrationService.register(userForTest);
         assertNotNull(registeredUser);
+        assertEquals(userForTest, storageDao.get(userForTest.getLogin()));
     }
 
     @Test
     void loginLengthItsSix_Ok() {
-        userForTest = new User("itssix", "ValidPassword", 20);
+        userForTest = new User("itsSix", "ValidPassword", 20);
         User registeredUser = registrationService.register(userForTest);
         assertNotNull(registeredUser);
+        assertEquals(userForTest, storageDao.get(userForTest.getLogin()));
     }
 
     @Test
     void ageItsEighteen_Ok() {
-        userForTest = new User("ValidLogin", "itssix", 18);
+        userForTest = new User("ValidLogin", "itsSix", 18);
         User registeredUser = registrationService.register(userForTest);
         assertNotNull(registeredUser);
+        assertEquals(userForTest, storageDao.get(userForTest.getLogin()));
     }
 
     @Test
